@@ -19,13 +19,21 @@ HireFlow is a premium, real-time recruiting and hiring platform built on top of 
 
 Calculated directly from codebase source code files:
 
-| Language / Filetype | Share (%) | Purpose |
-| :--- | :--- | :--- |
-| **JavaScript** | **48.19%** | Core frontend client logic, Lemma SDK connection, and real-time streaming polling |
-| **CSS** | **22.39%** | Vanilla CSS styling, premium particle/glow keyframe animations, and custom print stylesheets |
-| **HTML** | **19.83%** | Page structure, modal views, and interactive forms |
-| **Markdown** | **5.20%** | AI Agent instructions and documentation |
-| **JSON** | **4.39%** | Pod metadata, database schemas, and agent declarations |
+<div style="display: flex; width: 100%; height: 28px; border-radius: 6px; overflow: hidden; font-family: sans-serif; font-size: 11px; font-weight: bold; color: white; text-align: center; line-height: 28px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+  <div style="width: 48.19%; background-color: #f1e05a; color: #111;" title="JavaScript: 48.19%">JS (48.2%)</div>
+  <div style="width: 22.39%; background-color: #6366f1;" title="CSS: 22.39%">CSS (22.4%)</div>
+  <div style="width: 19.83%; background-color: #e34c26;" title="HTML: 19.83%">HTML (19.8%)</div>
+  <div style="width: 5.20%; background-color: #8b5cf6;" title="Markdown: 5.20%">MD (5.2%)</div>
+  <div style="width: 4.39%; background-color: #10b981;" title="JSON: 4.39%">JSON (4.4%)</div>
+</div>
+
+| | Language / Filetype | Share (%) | Purpose |
+| :---: | :--- | :--- | :--- |
+| 🟡 | **JavaScript** | **48.19%** | Core frontend client logic, Lemma SDK connection, and real-time streaming polling |
+| 🔵 | **CSS** | **22.39%** | Vanilla CSS styling, premium particle/glow keyframe animations, and custom print stylesheets |
+| 🔴 | **HTML** | **19.83%** | Page structure, modal views, and interactive forms |
+| 🟣 | **Markdown** | **5.20%** | AI Agent instructions and documentation |
+| 🟢 | **JSON** | **4.39%** | Pod metadata, database schemas, and agent declarations |
 
 ---
 
