@@ -1,0 +1,5 @@
+id,created_at,updated_at,title,description,required_skills,status
+5630e12f-5582-41e3-96d5-806774b00029,2026-06-27T08:04:16.840004Z,2026-06-27T08:04:16.840004Z,Software Engineer,"Multi-agent AI pipelines with autonomous job discovery, semantic scoring, and HITL workflows (FastAPI, Supabase,
+Groq)","Languages: Python, JavaScript (ES6+), TypeScript Frontend: React.js, Next.js, React Three Fiber, Three.js, Tailwind CSS, Framer Motion, shadcn/ui Backend: FastAPI, Node.js, Express.js, REST APIs Databases: PostgreSQL, Supabase, pgvector, MySQL AI & Automation: Groq API, Llama 3.3, sentence-transformers, OpenAI API, Playwright",open
+9ebf60ab-fbe7-4ec8-98f3-fc06156e8f47,2026-06-26T07:20:58.513949Z,2026-06-26T07:20:58.513949Z,Full Stack Engineer,"React, TypeScript, CSS, Next.js","React, TypeScript, CSS, Next.js",open
+c1c43802-8e18-4e60-87e7-be891ed3e73d,2026-06-26T04:32:53.269908Z,2026-06-26T04:32:53.269908Z,Frontend Engineer,"React, TypeScript, CSS, Next.js","React, TypeScript, CSS, Next.js",open

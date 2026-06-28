@@ -1,0 +1,59 @@
+{
+  "description": "Automatically scores new candidates against job requirements upon insertion.",
+  "edges": [
+    {
+      "id": "e1",
+      "label": null,
+      "source": "run-scorer",
+      "target": "end"
+    }
+  ],
+  "icon_url": null,
+  "mode": "GLOBAL",
+  "name": "auto-score",
+  "nodes": [
+    {
+      "config": {
+        "agent_name": "scorer",
+        "input_mapping": {
+          "name": {
+            "optional": false,
+            "type": "expression",
+            "value": "start.payload.name"
+          },
+          "resume_url": {
+            "optional": false,
+            "type": "expression",
+            "value": "start.payload.resume_url"
+          },
+          "role_applied": {
+            "optional": false,
+            "type": "expression",
+            "value": "start.payload.role_applied"
+          }
+        }
+      },
+      "id": "run-scorer",
+      "label": "Score Candidate",
+      "position": null,
+      "type": "AGENT"
+    },
+    {
+      "config": {},
+      "id": "end",
+      "label": "Done",
+      "position": null,
+      "type": "END"
+    }
+  ],
+  "start": {
+    "config": {
+      "operations": [
+        "INSERT"
+      ],
+      "table_name": "candidates"
+    },
+    "type": "DATASTORE_EVENT"
+  },
+  "visibility": "POD"
+}

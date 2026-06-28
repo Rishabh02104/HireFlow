@@ -1,0 +1,13 @@
+{
+  "name": "jobs",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "title", "type": "TEXT", "required": true },
+    { "name": "description", "type": "TEXT", "required": false },
+    { "name": "required_skills", "type": "TEXT", "required": false },
+    { "name": "status", "type": "ENUM", "required": true, "default": "open", "options": ["open", "closed"] }
+  ],
+  "config": {}
+}

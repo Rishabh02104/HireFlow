@@ -1,0 +1,93 @@
+{
+  "columns": [
+    {
+      "auto": true,
+      "computed": false,
+      "default": null,
+      "description": null,
+      "expression": null,
+      "foreign_key": null,
+      "max_length": null,
+      "name": "id",
+      "options": null,
+      "required": true,
+      "system": false,
+      "type": "UUID",
+      "type_params": null,
+      "unique": true
+    },
+    {
+      "auto": false,
+      "computed": false,
+      "default": null,
+      "description": null,
+      "expression": null,
+      "foreign_key": null,
+      "max_length": 240,
+      "name": "title",
+      "options": null,
+      "required": true,
+      "system": false,
+      "type": "TEXT",
+      "type_params": null,
+      "unique": false
+    },
+    {
+      "auto": false,
+      "computed": false,
+      "default": "open",
+      "description": null,
+      "expression": null,
+      "foreign_key": null,
+      "max_length": null,
+      "name": "status",
+      "options": [
+        "open",
+        "in_progress",
+        "done"
+      ],
+      "required": true,
+      "system": false,
+      "type": "ENUM",
+      "type_params": null,
+      "unique": false
+    },
+    {
+      "auto": true,
+      "computed": false,
+      "default": null,
+      "description": null,
+      "expression": null,
+      "foreign_key": null,
+      "max_length": null,
+      "name": "created_at",
+      "options": null,
+      "required": false,
+      "system": true,
+      "type": "DATETIME",
+      "type_params": null,
+      "unique": false
+    },
+    {
+      "auto": true,
+      "computed": false,
+      "default": null,
+      "description": null,
+      "expression": null,
+      "foreign_key": null,
+      "max_length": null,
+      "name": "updated_at",
+      "options": null,
+      "required": false,
+      "system": true,
+      "type": "DATETIME",
+      "type_params": null,
+      "unique": false
+    }
+  ],
+  "config": {},
+  "enable_rls": false,
+  "name": "items",
+  "primary_key_column": "id",
+  "visibility": "POD"
+}

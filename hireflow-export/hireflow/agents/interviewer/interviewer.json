@@ -1,0 +1,34 @@
+{
+  "agent_runtime": null,
+  "description": "Generates structured technical interview kits for candidates.",
+  "icon_url": null,
+  "input_schema": null,
+  "instruction": {
+    "$file": "instruction.md"
+  },
+  "metadata": null,
+  "name": "interviewer",
+  "output_schema": null,
+  "permissions": {
+    "grants": [
+      {
+        "permission_ids": [
+          "datastore.record.read",
+          "datastore.table.read"
+        ],
+        "resource_name": "candidates",
+        "resource_type": "datastore_table"
+      },
+      {
+        "permission_ids": [
+          "datastore.record.read",
+          "datastore.table.read"
+        ],
+        "resource_name": "jobs",
+        "resource_type": "datastore_table"
+      }
+    ]
+  },
+  "toolsets": [],
+  "visibility": "POD"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "digests",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "date", "type": "TEXT", "required": true },
+    { "name": "summary", "type": "TEXT", "required": true },
+    { "name": "flags", "type": "TEXT", "required": false }
+  ],
+  "config": {}
+}

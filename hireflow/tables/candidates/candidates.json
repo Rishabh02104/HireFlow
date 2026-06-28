@@ -1,0 +1,20 @@
+{
+  "name": "candidates",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true },
+    { "name": "email", "type": "TEXT", "required": true },
+    { "name": "role_applied", "type": "TEXT", "required": true },
+    { "name": "resume_url", "type": "TEXT", "required": false },
+    { "name": "resume_content", "type": "TEXT", "required": false },
+    { "name": "resume_filename", "type": "TEXT", "required": false },
+    { "name": "resume_text", "type": "TEXT", "required": false },
+    { "name": "status", "type": "ENUM", "required": true, "default": "new", "options": ["new", "screening", "interview", "offer", "rejected"] },
+    { "name": "ai_score", "type": "FLOAT", "required": false },
+    { "name": "ai_summary", "type": "TEXT", "required": false },
+    { "name": "notes", "type": "TEXT", "required": false }
+  ],
+  "config": {}
+}

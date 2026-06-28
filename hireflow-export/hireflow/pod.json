@@ -1,0 +1,13 @@
+{
+  "contents": {
+    "exclude": [
+      "apps"
+    ],
+    "with_data": true,
+    "with_files": true
+  },
+  "description": null,
+  "format_version": 2,
+  "icon_url": null,
+  "name": "hireflow"
+}

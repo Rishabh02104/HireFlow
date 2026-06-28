@@ -1,0 +1,5 @@
+*.log
+run_output.txt
+lemma_conv_messages_raw.json
+.DS_Store
+Thumbs.db

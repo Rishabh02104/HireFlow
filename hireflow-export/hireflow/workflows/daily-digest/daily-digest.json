@@ -1,0 +1,38 @@
+{
+  "description": "Orchestrates daily candidate pipeline analysis and updates the digests table.",
+  "edges": [
+    {
+      "id": "e1",
+      "label": null,
+      "source": "run-digester",
+      "target": "end"
+    }
+  ],
+  "icon_url": null,
+  "mode": "GLOBAL",
+  "name": "daily-digest",
+  "nodes": [
+    {
+      "config": {
+        "agent_name": "digester",
+        "input_mapping": {}
+      },
+      "id": "run-digester",
+      "label": "Run Digester Agent",
+      "position": null,
+      "type": "AGENT"
+    },
+    {
+      "config": {},
+      "id": "end",
+      "label": "Done",
+      "position": null,
+      "type": "END"
+    }
+  ],
+  "start": {
+    "config": null,
+    "type": "MANUAL"
+  },
+  "visibility": "POD"
+}

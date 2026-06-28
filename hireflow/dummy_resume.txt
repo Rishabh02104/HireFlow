@@ -1,0 +1,3 @@
+Candidate Peter Wane
+Skills: React, TypeScript, CSS, Next.js
+Experience: 5 years

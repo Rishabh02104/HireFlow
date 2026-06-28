@@ -1,0 +1,29 @@
+{
+  "name": "daily-digest",
+  "description": "Orchestrates daily candidate pipeline analysis and updates the digests table.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    {
+      "id": "run-digester",
+      "type": "AGENT",
+      "label": "Run Digester Agent",
+      "config": {
+        "agent_name": "digester",
+        "input_mapping": {}
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "run-digester",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

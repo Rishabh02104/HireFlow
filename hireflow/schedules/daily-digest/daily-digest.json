@@ -1,0 +1,8 @@
+{
+  "name": "daily-digest",
+  "schedule_type": "TIME",
+  "config": { "cron": "0 9 * * *" },
+  "workflow_name": "daily-digest",
+  "is_active": true,
+  "visibility": "POD"
+}
