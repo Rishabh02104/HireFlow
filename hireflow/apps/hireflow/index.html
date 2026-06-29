@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index.css?v=13" />
     <!-- Markdown Parser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
   </head>
@@ -817,7 +817,20 @@
     <div id="interview-kit-print-area" style="display:none"></div>
     <div id="resume-print-area" style="display:none"></div>
 
+    <!-- Load main script -->
+    <script src="index.js?v=13"></script>
+
     <!-- Bootstrap SDK Client -->
-    <script src="index.js" defer></script>
+    <script>
+      (function () {
+        var cfg = window.__LEMMA_CONFIG__ || {};
+        var base = (cfg.apiUrl || window.location.origin).replace(/\/$/, "");
+        var s = document.createElement("script");
+        s.src = base + "/public/sdk/lemma-client.js";
+        s.onload = boot;
+        s.onerror = function () { fatal("Couldn't load the Lemma SDK from " + s.src); };
+        document.head.appendChild(s);
+      })();
+    </script>
   </body>
 </html>
