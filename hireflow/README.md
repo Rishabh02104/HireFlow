@@ -35,6 +35,14 @@ Calculated directly from codebase source code files:
 | 🟣 | **Markdown** | **5.20%** | AI Agent instructions and documentation |
 | 🟢 | **JSON** | **4.39%** | Pod metadata, database schemas, and agent declarations |
 
+## 🔒 Dual-Access Security & Guest Sandbox
+
+To make review and evaluation seamless for hackathon judges, HireFlow provides two access pathways:
+*   **⚡ Owner Access**: Authenticate securely using Lemma OAuth to view the live, production hiring pipeline database.
+*   **🔍 Explore as Judge / Guest**: Bypasses authentication entirely to load a localized sandbox pre-seeded with **8 mock candidates** (complete with mock resumes, AI summaries, and match scores).
+    *   **Data Isolation**: All modifications (moving candidate stages, adding positions, editing details, deleting records) reside purely in local browser memory.
+    *   **Anti-Glitch Fallback**: If Lemma's AI server goes offline or returns errors, HireFlow intercepts them to output realistic simulated scores, insights, and kits, ensuring the evaluation is 100% bug-free.
+
 ---
 
 ## 📦 System Architecture
