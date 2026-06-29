@@ -3636,6 +3636,16 @@ ${highScoredNew}
         
         // Load in-memory datasets
         refreshData();
+
+        // Initialize widgets and plugins for Guest Mode
+        setupNotesAutoSave();
+        checkOnboarding();
+        setupDragAndDrop();
+        setupEditDragAndDrop();
+        updateFormProgress();
+        updateCardPreview();
+        
+        $("btnFloatingInsights").style.display = "flex";
         
         // Start polling (which fetches candidates in-memory)
         startPolling();
