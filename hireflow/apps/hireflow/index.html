@@ -3073,7 +3073,7 @@
             
             const reader = new FileReader();
             const base64Promise = new Promise((resolve, reject) => {
-              reader.onload = () => resolve(reader.result.split(',')[1]);
+              reader.onload = () => resolve(reader.result);
               reader.onerror = reject;
             });
             reader.readAsDataURL(editSelectedResumeFile);
@@ -4786,80 +4786,40 @@ ${highScoredNew}
         try {
           const cData = candidate.data || candidate;
           
-          if (cData.resume_file_id) {
-            // Get short-lived download URL from Lemma files storage
-            const fileResp = await client.files.getUrl(cData.resume_file_id);
-            const fileUrl = fileResp.url || fileResp;
-            
+          // First check for direct base64 data URL stored in resume_content (Step 4 fallback)
+          if (cData.resume_content && cData.resume_content.startsWith('data:')) {
             const a = document.createElement('a');
-            a.href = fileUrl;
-            a.download = cData.resume_file_name || (cData.name + '_resume');
-            a.target = '_blank';
+            a.href = cData.resume_content;
+            a.download = cData.resume_filename || ((cData.name || 'candidate').replace(/\s+/g, '_') + '_resume');
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             showToast('Resume downloaded', 'success');
             return;
           }
-          
-          // Fallback for old candidates or URLs
-          let resumeText = cData.resume_text || cData.resume_content || cData.resume_url || '';
-          
-          if (!resumeText) {
-            showToast('No resume available', 'error');
+
+          // Fallback to URL redirection
+          if (cData.resume_url && cData.resume_url.startsWith('http')) {
+            window.open(cData.resume_url, '_blank');
             return;
           }
-
-          if (resumeText.startsWith('http')) {
-            window.open(resumeText, '_blank');
-            return;
-          }
-
-          if (resumeText.startsWith('data:')) {
-            const parts = resumeText.split(',');
-            const mimeType = parts[0].split(':')[1].split(';')[0];
-            const base64Str = parts[1];
-            
-            const byteCharacters = atob(base64Str);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: mimeType });
-            
-            // Determine file extension
-            let ext = '.txt';
-            if (mimeType === 'application/pdf') ext = '.pdf';
-            else if (mimeType === 'application/msword') ext = '.doc';
-            else if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') ext = '.docx';
-            else if (mimeType === 'application/rtf') ext = '.rtf';
-            
-            let filename = cData.resume_filename || ((cData.name || 'candidate').replace(/\s+/g, '_') + '_resume' + ext);
-            
+          
+          // Fallback to plain text download if only text is present
+          if (cData.resume_text) {
+            const blob = new Blob([cData.resume_text], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = (cData.name || 'candidate').replace(/\s+/g, '_') + '_resume.txt';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('Resume downloaded', 'success');
+            showToast('Resume downloaded (text fallback)', 'info');
             return;
           }
 
-          const blob = new Blob([resumeText], { type: 'text/plain' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = (cData.name || 'candidate').replace(/\s+/g, '_') + '_resume.txt';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-          showToast('Resume downloaded (text only — original file not available)', 'info');
-
+          showToast('No resume available to download', 'error');
         } catch (err) {
           console.error('Download error:', err);
           showToast('Download failed: ' + err.message, 'error');
@@ -4926,7 +4886,7 @@ ${highScoredNew}
         var prompt = `You are evaluating a job candidate. Here is their resume text extracted from a PDF:
 
 ---RESUME START---
-${cData.resume_text || cData.resume_content || cData.resume_url}
+${cData.resume_text || "No resume text extracted."}
 ---RESUME END---
 
 Job: ${cData.role_applied}
