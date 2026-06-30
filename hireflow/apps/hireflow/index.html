@@ -5349,7 +5349,7 @@ SUMMARY: [your evaluation]`;
             }
             return mockInsights;
           } else {
-            // Interviewer kit fallback
+            // Determine candidate name from prompt
             let candName = "Candidate";
             if (prompt.toLowerCase().includes("vikram")) candName = "Vikram Nair";
             else if (prompt.toLowerCase().includes("arjun")) candName = "Arjun Mehta";
@@ -5359,9 +5359,61 @@ SUMMARY: [your evaluation]`;
             else if (prompt.toLowerCase().includes("ananya")) candName = "Ananya Roy";
             else if (prompt.toLowerCase().includes("deepak")) candName = "Deepak Verma";
             else if (prompt.toLowerCase().includes("rahul")) candName = "Rahul Gupta";
-            
-            const mockKit = `
-## Structured Interview Kit for ${candName}
+
+            const lowerPrompt = prompt.toLowerCase();
+            if (lowerPrompt.includes("offer letter") || lowerPrompt.includes("offer summary") || lowerPrompt.includes("congratulations")) {
+              // Offer Letter Fallback mock
+              let role = "Frontend Engineer";
+              if (lowerPrompt.includes("full stack")) role = "Full Stack Engineer";
+              
+              const mockOffer = `Subject: Offer of Employment - ${role}
+
+Dear ${candName},
+
+On behalf of HireFlow, I am absolutely thrilled to offer you the position of ${role}. We were incredibly impressed by your technical expertise and background during our interview process.
+
+As discussed, this offer is contingent upon the successful completion of our standard background check and verification. We would like to suggest a start date within the next 2 to 4 weeks, which we can coordinate together with HR. Please review and sign the formal offer document within 3 business days to confirm your acceptance.
+
+Details regarding your full compensation, benefits package, and company policies will be provided in the formal onboarding packet. We are excited about the prospect of you joining the team and contributing to our mission.
+
+Warm regards,
+
+The HireFlow Hiring Team`;
+
+              if (typeof partialCallback === 'function') {
+                partialCallback(mockOffer);
+              }
+              return mockOffer;
+
+            } else if (lowerPrompt.includes("rejection") || lowerPrompt.includes("reject") || lowerPrompt.includes("moving forward")) {
+              // Rejection Email Fallback mock
+              let role = "Frontend Engineer";
+              if (lowerPrompt.includes("full stack")) role = "Full Stack Engineer";
+              
+              const mockRejection = `Subject: Update on your application for ${role} - HireFlow
+
+Dear ${candName},
+
+Thank you very much for taking the time to meet with us and discuss the ${role} position at HireFlow. We truly appreciate your interest in our company and the time you spent going through our evaluation process.
+
+We were highly impressed by your qualifications and the strengths you demonstrated during our conversations. However, after careful consideration, we have decided to move forward with other candidates whose experience more closely aligns with our current project requirements.
+
+Please know that this was a difficult decision, as you made a very strong impression on our team. We would love to keep your profile on file for future opportunities that match your background, and we encourage you to apply for new roles with us as they open up.
+
+We wish you the very best of luck in your job search and your future professional endeavors.
+
+Warm regards,
+
+The HireFlow Hiring Team`;
+
+              if (typeof partialCallback === 'function') {
+                partialCallback(mockRejection);
+              }
+              return mockRejection;
+
+            } else {
+              // Interviewer kit fallback mock
+              const mockKit = `## Structured Interview Kit for ${candName}
 
 ### Culture Fit Questions
 1. **Collaboration Style**: Can you describe a project where you collaborated closely with product managers and designers? How did you resolve design-to-development differences?
@@ -5385,12 +5437,13 @@ SUMMARY: [your evaluation]`;
 | **00:05 - 00:25** | Technical Deep Dive | Architecture, React, and TypeScript questions |
 | **00:25 - 00:45** | Practical Scenario | Live coding/architecture design whiteboard |
 | **00:45 - 00:55** | Culture & Situational | Collaboration, ownership, and adaptability |
-| **00:55 - 01:00** | Q&A | Candidate questions & closing |
-            `;
-            if (typeof partialCallback === 'function') {
-              partialCallback(mockKit);
+| **00:55 - 01:00** | Q&A | Candidate questions & closing |`;
+
+              if (typeof partialCallback === 'function') {
+                partialCallback(mockKit);
+              }
+              return mockKit;
             }
-            return mockKit;
           }
         }
       }
