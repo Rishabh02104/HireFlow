@@ -4816,8 +4816,37 @@ ${highScoredNew}
           }
 
           if (resumeText.startsWith('data:')) {
-            const base64 = resumeText.split(',')[1];
-            resumeText = atob(base64);
+            const parts = resumeText.split(',');
+            const mimeType = parts[0].split(':')[1].split(';')[0];
+            const base64Str = parts[1];
+            
+            const byteCharacters = atob(base64Str);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: mimeType });
+            
+            // Determine file extension
+            let ext = '.txt';
+            if (mimeType === 'application/pdf') ext = '.pdf';
+            else if (mimeType === 'application/msword') ext = '.doc';
+            else if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') ext = '.docx';
+            else if (mimeType === 'application/rtf') ext = '.rtf';
+            
+            let filename = cData.resume_filename || ((cData.name || 'candidate').replace(/\s+/g, '_') + '_resume' + ext);
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Resume downloaded', 'success');
+            return;
           }
 
           const blob = new Blob([resumeText], { type: 'text/plain' });
