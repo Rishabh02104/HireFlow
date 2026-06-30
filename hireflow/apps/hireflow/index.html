@@ -5589,12 +5589,14 @@ Could not generate AI kit in time. Here are standard questions for this role bas
           </div>
         `;
 
+        document.body.classList.add("print-kit");
         $("interview-kit-print-area").innerHTML = headerHtml + $("kitText").innerHTML + footerHtml;
         
         window.print();
         
         // Clear after print dialog closes
         $("interview-kit-print-area").innerHTML = "";
+        document.body.classList.remove("print-kit");
       }
 
       function closeKitModal(event) {
