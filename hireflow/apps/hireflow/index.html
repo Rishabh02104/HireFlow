@@ -3082,7 +3082,19 @@
             payload.resume_content = base64Str;
             payload.resume_filename = editSelectedResumeFile.name;
             payload.resume_text = editExtractedResumeText || "";
-            payload.resume_url = "/" + editSelectedResumeFile.name;
+            
+            if (isGuestMode) {
+              payload.resume_url = "/" + editSelectedResumeFile.name;
+              payload.resume_file_id = "";
+              payload.resume_file_name = "";
+              payload.resume_file_type = "";
+            } else {
+              const fileResp = await client.files.upload(editSelectedResumeFile, { name: newName + "_resume" });
+              payload.resume_url = fileResp.path || fileResp.url || fileResp.id;
+              payload.resume_file_id = fileResp.path || fileResp.id || fileResp.url;
+              payload.resume_file_name = editSelectedResumeFile.name;
+              payload.resume_file_type = editSelectedResumeFile.type;
+            }
           }
           
           const updateResp = await updateCandidate(activeModalCandidateId, payload);
@@ -4554,6 +4566,9 @@ ${highScoredNew}
         try {
           let resumeUrl = "";
           let base64Data = "";
+          let resumeFileId = "";
+          let resumeFileName = "";
+          let resumeFileType = "";
 
           if (isGuestMode) {
             resumeUrl = "/" + selectedResumeFile.name;
@@ -4562,6 +4577,9 @@ ${highScoredNew}
             // Upload actual file to Lemma files datastore
             const fileResp = await client.files.upload(selectedResumeFile, { name: name + "_resume" });
             resumeUrl = fileResp.path || fileResp.url || fileResp.id;
+            resumeFileId = fileResp.path || fileResp.id || fileResp.url;
+            resumeFileName = selectedResumeFile.name;
+            resumeFileType = selectedResumeFile.type;
             base64Data = await fileToBase64(selectedResumeFile);
           }
 
@@ -4574,7 +4592,10 @@ ${highScoredNew}
             resume_filename: selectedResumeFile.name,
             resume_text: extractedResumeText || "",
             notes: notes,
-            status: "new"
+            status: "new",
+            resume_file_id: resumeFileId,
+            resume_file_name: resumeFileName,
+            resume_file_type: resumeFileType
           });
 
           submitBtn.innerHTML = "✅ Candidate Added!";
@@ -4764,7 +4785,25 @@ ${highScoredNew}
       async function downloadResume(candidate) {
         try {
           const cData = candidate.data || candidate;
-          let resumeText = cData.resume_text || cData.resume_content || '';
+          
+          if (cData.resume_file_id) {
+            // Get short-lived download URL from Lemma files storage
+            const fileResp = await client.files.getUrl(cData.resume_file_id);
+            const fileUrl = fileResp.url || fileResp;
+            
+            const a = document.createElement('a');
+            a.href = fileUrl;
+            a.download = cData.resume_file_name || (cData.name + '_resume');
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('Resume downloaded', 'success');
+            return;
+          }
+          
+          // Fallback for old candidates or URLs
+          let resumeText = cData.resume_text || cData.resume_content || cData.resume_url || '';
           
           if (!resumeText) {
             showToast('No resume available', 'error');
@@ -4790,11 +4829,11 @@ ${highScoredNew}
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          showToast('Resume downloaded', 'success');
+          showToast('Resume downloaded (text only — original file not available)', 'info');
 
         } catch (err) {
           console.error('Download error:', err);
-          showToast('Download failed', 'error');
+          showToast('Download failed: ' + err.message, 'error');
         }
       }
 

@@ -14,7 +14,10 @@
     { "name": "status", "type": "ENUM", "required": true, "default": "new", "options": ["new", "screening", "interview", "offer", "rejected"] },
     { "name": "ai_score", "type": "FLOAT", "required": false },
     { "name": "ai_summary", "type": "TEXT", "required": false },
-    { "name": "notes", "type": "TEXT", "required": false }
+    { "name": "notes", "type": "TEXT", "required": false },
+    { "name": "resume_file_id", "type": "TEXT", "required": false },
+    { "name": "resume_file_name", "type": "TEXT", "required": false },
+    { "name": "resume_file_type", "type": "TEXT", "required": false }
   ],
   "config": {}
 }
