@@ -2540,49 +2540,165 @@
       #interview-kit-print-area table { page-break-inside: avoid; }
       #interview-kit-print-area li { page-break-inside: avoid; }
 
-      /* Resume print styles */
-      body.print-resume #resume-print-area {
+      /* Rebuilt Resume PDF Print Styles */
+      body.print-resume #resume-pdf-print-area {
         display: block !important;
         position: fixed;
         top: 0; left: 0;
         width: 100%;
-        padding: 48px 56px;
-        font-family: 'Inter', 'Segoe UI', sans-serif;
-        color: #111;
+        max-width: 8.5in;
+        margin: 0 auto;
+        padding: 0.7in;
         background: white;
-        font-size: 13px;
-        line-height: 1.7;
+        color: #1a1a1a;
+        font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.5;
       }
 
-      #resume-print-area .resume-doc-header {
-        border-bottom: 3px solid #6366f1;
-        padding-bottom: 16px;
-        margin-bottom: 28px;
+      /* Header */
+      #resume-pdf-print-area .resume-name {
+        font-size: 28pt;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+        font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
       }
 
-      #resume-print-area .resume-doc-header h1 {
-        font-size: 26px;
-        font-weight: 800;
-        color: #0f0f1a;
-        margin: 0 0 8px 0;
+      #resume-pdf-print-area .resume-contact {
+        font-size: 10pt;
+        color: #444;
+        margin-bottom: 16px;
       }
 
-      #resume-print-area .resume-doc-header .resume-meta {
-        font-size: 12px;
-        color: #555;
+      #resume-pdf-print-area .resume-contact span:not(:last-child)::after {
+        content: " • ";
+        color: #999;
+      }
+
+      #resume-pdf-print-area .resume-header-divider {
+        border: none;
+        border-top: 2px solid #6366f1;
+        margin: 0 0 24px 0;
+      }
+
+      /* Section headers */
+      #resume-pdf-print-area .resume-section {
+        margin-bottom: 20px;
+      }
+
+      #resume-pdf-print-area .resume-section-title {
+        font-size: 13pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #111;
         margin-bottom: 4px;
       }
 
-      #resume-print-area .resume-content-body {
-        font-size: 13px;
-        color: #222;
-        white-space: pre-wrap;
-        line-height: 1.6;
+      #resume-pdf-print-area .resume-section-divider {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 0 0 10px 0;
       }
+
+      /* Summary */
+      #resume-pdf-print-area .resume-summary {
+        font-size: 10.5pt;
+        color: #333;
+        line-height: 1.5;
+      }
+
+      /* Skills */
+      #resume-pdf-print-area .skill-category {
+        margin-bottom: 6px;
+        display: flex;
+        gap: 6px;
+      }
+
+      #resume-pdf-print-area .skill-category-name {
+        font-weight: 600;
+        color: #111;
+        min-width: 140px;
+        flex-shrink: 0;
+      }
+
+      #resume-pdf-print-area .skill-category-list {
+        color: #333;
+      }
+
+      /* Experience / Projects entries */
+      #resume-pdf-print-area .entry {
+        margin-bottom: 14px;
+        page-break-inside: avoid;
+      }
+
+      #resume-pdf-print-area .entry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2px;
+      }
+
+      #resume-pdf-print-area .entry-title {
+        font-weight: 700;
+        font-size: 11pt;
+        color: #111;
+      }
+
+      #resume-pdf-print-area .entry-dates {
+        font-size: 9.5pt;
+        color: #666;
+        white-space: nowrap;
+      }
+
+      #resume-pdf-print-area .entry-subtitle {
+        font-size: 10pt;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 6px;
+      }
+
+      #resume-pdf-print-area .entry ul {
+        margin: 0;
+        padding-left: 16px;
+      }
+
+      #resume-pdf-print-area .entry li {
+        margin-bottom: 4px;
+        color: #333;
+        font-size: 10.5pt;
+      }
+
+      /* Education */
+      #resume-pdf-print-area .edu-entry {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      /* Footer */
+      #resume-pdf-print-area .resume-footer {
+        position: fixed;
+        bottom: 0.4in;
+        left: 0.7in;
+        right: 0.7in;
+        font-size: 8pt;
+        color: #aaa;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #eee;
+        padding-top: 6px;
+      }
+
+      /* Page breaks */
+      .resume-section { page-break-inside: avoid; }
+      @page { margin: 0; }
     }
     </style>
     <div id="interview-kit-print-area" style="display:none"></div>
-    <div id="resume-print-area" style="display:none"></div>
+    <div id="resume-pdf-print-area" style="display:none"></div>
 
     <!-- Load main script -->
     <script>
@@ -4879,6 +4995,183 @@ ${highScoredNew}
         }
       }
 
+      function parseResumeText(text) {
+        if (!text) return null;
+        
+        // Normalize newlines and spacing
+        text = text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+        
+        // Match standard contact details
+        const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+        const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+        const linkedinRegex = /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+/gi;
+        const githubRegex = /(?:https?:\/\/)?(?:www\.)?github\.com\/[a-zA-Z0-9_-]+/gi;
+        
+        const emails = text.match(emailRegex) || [];
+        const phones = text.match(phoneRegex) || [];
+        const linkedins = text.match(linkedinRegex) || [];
+        const githubs = text.match(githubRegex) || [];
+        
+        // Section headers with flexible patterns
+        const sections = [
+          { key: 'summary', regex: /(?:^|\n)(?:summary|professional\s+summary|career\s+summary|about\s+me|profile)(?:\s*[\n:\-–]|(?=\s*\n))/i },
+          { key: 'skills', regex: /(?:^|\n)(?:skills|technical\s+skills|key\s+skills|core\s+competencies|technologies|expertise)(?:\s*[\n:\-–]|(?=\s*\n))/i },
+          { key: 'experience', regex: /(?:^|\n)(?:experience|professional\s+experience|work\s+experience|employment\s+history|work\s+history)(?:\s*[\n:\-–]|(?=\s*\n))/i },
+          { key: 'projects', regex: /(?:^|\n)(?:projects|personal\s+projects|key\s+projects|academic\s+projects)(?:\s*[\n:\-–]|(?=\s*\n))/i },
+          { key: 'education', regex: /(?:^|\n)(?:education|academic\s+background|academic\s+qualification|qualifications)(?:\s*[\n:\-–]|(?=\s*\n))/i }
+        ];
+        
+        const matches = [];
+        sections.forEach(sec => {
+          sec.regex.lastIndex = 0;
+          const match = sec.regex.exec(text);
+          if (match) {
+            matches.push({
+              key: sec.key,
+              index: match.index,
+              length: match[0].length,
+              headerText: match[0].trim()
+            });
+          }
+        });
+        
+        matches.sort((a, b) => a.index - b.index);
+        
+        const result = {
+          summary: '',
+          skills: '',
+          experience: '',
+          projects: '',
+          education: '',
+          contact: {
+            emails: [...new Set(emails)],
+            phones: [...new Set(phones)],
+            linkedins: [...new Set(linkedins)],
+            githubs: [...new Set(githubs)]
+          }
+        };
+        
+        for (let i = 0; i < matches.length; i++) {
+          const start = matches[i].index + matches[i].length;
+          const end = (i + 1 < matches.length) ? matches[i + 1].index : text.length;
+          result[matches[i].key] = text.slice(start, end).trim();
+        }
+        
+        const hasAnyStructuredSection = matches.some(m => result[m.key].length > 0);
+        if (!hasAnyStructuredSection) return null;
+        
+        return result;
+      }
+
+      function renderSkills(skillsText) {
+        if (!skillsText) return '';
+        const lines = skillsText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        let html = '';
+        
+        let hasCategories = false;
+        lines.forEach(line => {
+          const colonIdx = line.indexOf(':');
+          if (colonIdx > 0 && colonIdx < 30) {
+            hasCategories = true;
+            const catName = line.substring(0, colonIdx).trim();
+            const catList = line.substring(colonIdx + 1).trim();
+            html += `
+              <div class="skill-category">
+                <span class="skill-category-name">${esc(catName)}:</span>
+                <span class="skill-category-list">${esc(catList)}</span>
+              </div>
+            `;
+          }
+        });
+        
+        if (!hasCategories) {
+          const list = lines.join(', ');
+          html = `
+            <div class="skill-category">
+              <span class="skill-category-list">${esc(list)}</span>
+            </div>
+          `;
+        }
+        return html;
+      }
+
+      function renderExperienceOrProjects(text) {
+        if (!text) return '';
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        
+        let html = '';
+        let inList = false;
+        
+        lines.forEach(line => {
+          const bulletMatch = line.match(/^[\s*•\-o>]+\s*(.*)/);
+          if (bulletMatch) {
+            if (!inList) {
+              html += '<ul>';
+              inList = true;
+            }
+            html += `<li>${esc(bulletMatch[1])}</li>`;
+          } else {
+            if (inList) {
+              html += '</ul>';
+              inList = false;
+            }
+            
+            const hasDate = /(?:\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\b|\b\d{4}\b|Present)/i.test(line);
+            
+            if (hasDate) {
+              const parts = line.split(/\s*[\-\|•]\s*/);
+              if (parts.length >= 2) {
+                html += `
+                  <div class="entry">
+                    <div class="entry-header">
+                      <span class="entry-title">${esc(parts[0])}</span>
+                      <span class="entry-dates">${esc(parts[parts.length - 1])}</span>
+                    </div>
+                    ${parts.length > 2 ? `<div class="entry-subtitle">${esc(parts.slice(1, -1).join(' - '))}</div>` : ''}
+                  </div>
+                `;
+              } else {
+                html += `<div class="entry-title" style="margin-top: 10px;">${esc(line)}</div>`;
+              }
+            } else {
+              html += `<p style="margin: 6px 0; font-size: 10.5pt; color: #333;">${esc(line)}</p>`;
+            }
+          }
+        });
+        
+        if (inList) {
+          html += '</ul>';
+        }
+        return html;
+      }
+
+      function renderEducation(text) {
+        if (!text) return '';
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        let html = '';
+        
+        lines.forEach(line => {
+          const hasDate = /(?:\b\d{4}\b|Present)/i.test(line);
+          if (hasDate) {
+            const parts = line.split(/\s*[\-\|•]\s*/);
+            if (parts.length >= 2) {
+              html += `
+                <div class="edu-entry">
+                  <span style="font-weight: 700;">${esc(parts[0])}</span>
+                  <span style="color: #666; font-size: 9.5pt;">${esc(parts[parts.length - 1])}</span>
+                </div>
+                ${parts.length > 2 ? `<div style="font-style: italic; color: #555; font-size: 10pt; margin-bottom: 8px;">${esc(parts.slice(1, -1).join(' - '))}</div>` : ''}
+              `;
+            } else {
+              html += `<div class="edu-entry" style="font-weight: 700; margin-bottom: 6px;">${esc(line)}</div>`;
+            }
+          } else {
+            html += `<div style="margin-bottom: 6px; font-size: 10.5pt; color: #333;">${esc(line)}</div>`;
+          }
+        });
+        return html;
+      }
+
       function downloadResumeAsPDF(candidate) {
         try {
           const cData = candidate.data || candidate;
@@ -4890,13 +5183,11 @@ ${highScoredNew}
             return;
           }
 
-          // If it's a base64 data URL, decode it first
           if (resumeText.startsWith('data:')) {
             const parts = resumeText.split(',');
             const mimeType = parts[0].split(':')[1].split(';')[0];
             const base64Str = parts[1];
             
-            // If the original file is already a PDF, download it directly
             if (mimeType === 'application/pdf') {
               downloadResume(candidate);
               return;
@@ -4909,26 +5200,107 @@ ${highScoredNew}
             }
           }
 
-          const headerHtml = `
-            <div class="resume-doc-header">
-              <h1>${esc(cData.name || 'Candidate')}</h1>
-              <div class="resume-meta"><strong>Role Applied:</strong> ${esc(cData.role_applied || 'N/A')}</div>
-              <div class="resume-meta"><strong>Email:</strong> ${esc(cData.email || 'N/A')}</div>
-              <div class="resume-meta"><strong>Generated on:</strong> ${new Date().toLocaleDateString()}</div>
+          const parsed = parseResumeText(resumeText);
+          let html = '';
+          
+          if (parsed) {
+            const contactItems = [];
+            
+            if (parsed.contact.emails.length > 0) {
+              parsed.contact.emails.forEach(e => contactItems.push(`<span>${esc(e)}</span>`));
+            } else if (cData.email) {
+              contactItems.push(`<span>${esc(cData.email)}</span>`);
+            }
+            
+            if (parsed.contact.phones.length > 0) {
+              parsed.contact.phones.forEach(p => contactItems.push(`<span>${esc(p)}</span>`));
+            }
+            if (parsed.contact.linkedins.length > 0) {
+              parsed.contact.linkedins.forEach(l => contactItems.push(`<span>${esc(l)}</span>`));
+            }
+            if (parsed.contact.githubs.length > 0) {
+              parsed.contact.githubs.forEach(g => contactItems.push(`<span>${esc(g)}</span>`));
+            }
+            
+            html += `<div class="resume-name">${esc(cData.name || 'Candidate')}</div>`;
+            if (contactItems.length > 0) {
+              html += `<div class="resume-contact">${contactItems.join('')}</div>`;
+            }
+            html += `<hr class="resume-header-divider">`;
+            
+            if (parsed.summary) {
+              html += `
+                <div class="resume-section">
+                  <div class="resume-section-title">Summary</div>
+                  <hr class="resume-section-divider">
+                  <div class="resume-summary">${esc(parsed.summary)}</div>
+                </div>
+              `;
+            }
+            if (parsed.skills) {
+              html += `
+                <div class="resume-section">
+                  <div class="resume-section-title">Skills</div>
+                  <hr class="resume-section-divider">
+                  ${renderSkills(parsed.skills)}
+                </div>
+              `;
+            }
+            if (parsed.experience) {
+              html += `
+                <div class="resume-section">
+                  <div class="resume-section-title">Experience</div>
+                  <hr class="resume-section-divider">
+                  ${renderExperienceOrProjects(parsed.experience)}
+                </div>
+              `;
+            }
+            if (parsed.projects) {
+              html += `
+                <div class="resume-section">
+                  <div class="resume-section-title">Projects</div>
+                  <hr class="resume-section-divider">
+                  ${renderExperienceOrProjects(parsed.projects)}
+                </div>
+              `;
+            }
+            if (parsed.education) {
+              html += `
+                <div class="resume-section">
+                  <div class="resume-section-title">Education</div>
+                  <hr class="resume-section-divider">
+                  ${renderEducation(parsed.education)}
+                </div>
+              `;
+            }
+          } else {
+            // Fallback for unparseable resumes
+            html += `
+              <div class="resume-name">${esc(cData.name || 'Candidate')}</div>
+              <div class="resume-contact"><span>${esc(cData.email || 'N/A')}</span></div>
+              <hr class="resume-header-divider">
+              <div class="resume-section">
+                <div class="resume-section-title">Resume Content</div>
+                <hr class="resume-section-divider">
+                <div class="resume-summary" style="white-space: pre-wrap;">${esc(resumeText)}</div>
+              </div>
+            `;
+          }
+          
+          html += `
+            <div class="resume-footer">
+              <span>Generated by HireFlow AI</span>
+              <span>Page 1</span>
             </div>
           `;
-
-          const bodyHtml = `
-            <div class="resume-content-body">${esc(resumeText || 'No resume text available.')}</div>
-          `;
-
-          $("resume-print-area").innerHTML = headerHtml + bodyHtml;
+          
+          $("resume-pdf-print-area").innerHTML = html;
           
           document.body.classList.add("print-resume");
           window.print();
           document.body.classList.remove("print-resume");
           
-          $("resume-print-area").innerHTML = "";
+          $("resume-pdf-print-area").innerHTML = "";
           showToast('PDF download started', 'success');
         } catch (err) {
           console.error('PDF download error:', err);
