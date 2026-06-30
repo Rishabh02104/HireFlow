@@ -3089,7 +3089,7 @@
               payload.resume_file_name = "";
               payload.resume_file_type = "";
             } else {
-              const fileResp = await client.files.upload(editSelectedResumeFile, { name: newName + "_resume" });
+              const fileResp = await client.files.upload(editSelectedResumeFile, { name: editSelectedResumeFile.name });
               payload.resume_url = fileResp.path || fileResp.url || fileResp.id;
               payload.resume_file_id = fileResp.path || fileResp.id || fileResp.url;
               payload.resume_file_name = editSelectedResumeFile.name;
@@ -4575,7 +4575,7 @@ ${highScoredNew}
             base64Data = await fileToBase64(selectedResumeFile);
           } else {
             // Upload actual file to Lemma files datastore
-            const fileResp = await client.files.upload(selectedResumeFile, { name: name + "_resume" });
+            const fileResp = await client.files.upload(selectedResumeFile, { name: selectedResumeFile.name });
             resumeUrl = fileResp.path || fileResp.url || fileResp.id;
             resumeFileId = fileResp.path || fileResp.id || fileResp.url;
             resumeFileName = selectedResumeFile.name;
